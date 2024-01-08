@@ -35,7 +35,17 @@ export default function FormPropsTextFields() {
         })
         setShowError(currErr);
         if (currErr.length == 0) {
-            console.log(formState, "fof", formState)
+            console.log(formState, "fof", formState);
+            fetch("http://localhost:5000/user/create", {
+                method: 'POST',
+                body: JSON.stringify(formState)
+            }).then((res) => {
+                return res.json()
+            }).then(data => {
+                console.log("data", data)
+            }).catch((err) => {
+                console.log(err)
+            })
         }
     }
     return (
