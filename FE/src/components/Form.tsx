@@ -11,7 +11,7 @@ const FormData: { id: number, name: 'Firstname' | 'Lastname' | 'Email' | 'Phone'
 ]
 interface formField { Firstname: string, Lastname: string, Email: string, Phone: string, Status: boolean }
 
-export default function FormPropsTextFields() {
+export default function FormComponent() {
     const [formState, setFormState] = useState<formField>({ Firstname: '', Lastname: '', Email: '', Phone: '', Status: false });
     const [showError, setShowError] = useState<string[]>([]);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +35,12 @@ export default function FormPropsTextFields() {
         })
         setShowError(currErr);
         if (currErr.length == 0) {
-            console.log(formState, "fof", formState);
             fetch("http://localhost:5000/user/create", {
                 method: 'POST',
-                body: JSON.stringify(formState)
+                body: JSON.stringify(formState),
+                headers: {
+                    "Content-Type": "application/json"
+                }
             }).then((res) => {
                 return res.json()
             }).then(data => {
