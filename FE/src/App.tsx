@@ -1,11 +1,13 @@
 import { Box, Button, FormControl, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import React, { useState } from "react";
 import TableComponent from "./components/TableComponent";
-import FormComponent from "./components/form";
+import FormComponent from "./components/Form";
+
 
 export default function App() {
   const [search, setSearch] = useState("Firstname");
   const [inputState, setInputState] = useState("");
+  const [open, setOpen] = useState(false)
   const handleChange = (e: SelectChangeEvent) => {
     setSearch(e.target.value)
   }
@@ -17,11 +19,29 @@ export default function App() {
   return (
     <main>
       <Box sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-        '& .topsearch': { display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        '& .nav': {
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: '8px'
+        },
+        '& .topsearch': {
+          display: 'flex',
+          alignItems: 'center',
+          marginRight: "8px",
+        },
+
+        "& .rowselect": {
+          marginLeft: "8px",
+
+        },
+        "& .rowinput": {
+          marginLeft: "8px",
+        }
+
       }}>
-        <Box className="topsearch">
-          <FormControl fullWidth>
+        <Box className="nav">
+          <Box className="topsearch">
+            <FormControl className="rowselect" >
             <Select
               value={search}
               onChange={handleChange}
@@ -36,7 +56,8 @@ export default function App() {
               })}
             </Select>
           </FormControl>
-          <TextField
+            <TextField
+              className="rowinput"
             required
             // error={showError.includes(item.name)}
             id="outlined-required"
@@ -44,14 +65,16 @@ export default function App() {
             value={inputState}
             type={'text'}
             onChange={handleChangeInput}
-          />
-          <Button variant="contained" >
+            />
+          </Box>
+
+          <Button variant="contained" onClick={() => setOpen(true)} >
             Create
           </Button>
         </Box>
       </Box>
       <TableComponent />
-      <FormComponent />
+      <FormComponent open={open} handleClose={() => setOpen(false)} />
     </main>
   );
 }
