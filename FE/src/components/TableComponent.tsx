@@ -8,18 +8,7 @@ import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const deleteItem = (id: any) => {
-  fetch(`http://localhost:5000/user/${id}`, {
-    method: 'DELETE',
-  }).then((res) => {
-    return res.json()
-  }).then(data => {
-    console.log("data", data)
-  }).catch((err) => {
-    console.log(err)
-  })
-}
-export default function TableComponent() {
+const TableComponent: React.FC<{ setid: (id: string) => void }> = ({ setid }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tableData, setTableData] = useState<any[]>([]);
   useEffect(() => {
@@ -65,7 +54,7 @@ export default function TableComponent() {
                 <TableCell align="center">{row.Phone}</TableCell>
                 <TableCell align="center">{row.Status ? "Active" : "InActive"}</TableCell>
 
-                <TableCell align="center"><IconButton aria-label="delete" size="small" onClick={() => deleteItem(row._id)}>
+                <TableCell align="center"><IconButton aria-label="delete" size="small" onClick={() => setid(row._id)}>
                   D
                 </IconButton>
                   <IconButton aria-label="delete" size="small">
@@ -79,3 +68,4 @@ export default function TableComponent() {
     </>
   );
 }
+export default TableComponent;

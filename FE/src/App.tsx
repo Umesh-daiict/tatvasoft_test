@@ -2,18 +2,31 @@ import { Box, Button, FormControl, MenuItem, Select, SelectChangeEvent, TextFiel
 import React, { useState } from "react";
 import TableComponent from "./components/TableComponent";
 import FormComponent from "./components/Form";
+import DeleteModel from "./components/DeleteForm";
 
 
 export default function App() {
   const [search, setSearch] = useState("Firstname");
   const [inputState, setInputState] = useState("");
   const [open, setOpen] = useState(false)
+  const [dId, setDid] = useState<string | null>(null)
   const handleChange = (e: SelectChangeEvent) => {
     setSearch(e.target.value)
   }
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputState(e.target.value)
+  }
+  const deleteItem = () => {
+    fetch(`http://localhost:5000/user/${dId}`, {
+      method: 'DELETE',
+    }).then((res) => {
+      return res.json()
+    }).then(data => {
+      console.log("data", data)
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
   return (
@@ -73,8 +86,9 @@ export default function App() {
           </Button>
         </Box>
       </Box>
-      <TableComponent />
+      <TableComponent setid={(id: string) => setDid(id)} />
       <FormComponent open={open} handleClose={() => setOpen(false)} />
+      <DeleteModel open={dId != null} onDelete={deleteItem} onClose={() => setDid(null)} />
     </main>
   );
 }
