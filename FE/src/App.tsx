@@ -9,7 +9,7 @@ export default function App() {
   const [search, setSearch] = useState("Firstname");
   const [inputState, setInputState] = useState("");
   const [open, setOpen] = useState(false)
-  const [dId, setDid] = useState<string | null>(null)
+  const [dId, setDid] = useState<string | null>("null")
   const handleChange = (e: SelectChangeEvent) => {
     setSearch(e.target.value)
   }
