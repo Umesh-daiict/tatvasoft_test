@@ -7,10 +7,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
+import { Delete, Edit } from '@mui/icons-material';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TableComponent: React.FC<{ setid: (id: string) => void }> = ({ setid }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [tableData, setTableData] = useState<any[]>([]);
+  const [tableData, setTableData] = useState<any[]>([{ _id: 1 }]);
   useEffect(() => {
     fetch("http://localhost:5000/user", {
       method: 'GET',
@@ -55,10 +56,11 @@ const TableComponent: React.FC<{ setid: (id: string) => void }> = ({ setid }) =>
                 <TableCell align="center">{row.Status ? "Active" : "InActive"}</TableCell>
 
                 <TableCell align="center"><IconButton aria-label="delete" size="small" onClick={() => setid(row._id)}>
-                  D
+                  <Delete />
                 </IconButton>
                   <IconButton aria-label="delete" size="small">
-                    I</IconButton>
+                    <Edit />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
