@@ -24,7 +24,7 @@ route.post('/create', (req, res) => {
 		const user = new User(req.body);
 
 		user.save();
-		res.json({ msg: 'done' });
+		res.json({ msg: 'done', users: User.find({}) });
 	} catch (err) {
 		res.status(501).json({ msg: 'got error' });
 	}
@@ -34,7 +34,7 @@ route.patch('/:id', async (req, res) => {
 	const id = req.params.id;
 	try {
 		const info = await User.updateOne({ _id: id }, { $set: req.body });
-		res.json({ msg: 'done', info });
+		res.json({ msg: 'done', info, users: User.find({}) });
 	} catch (err) {
 		console.log(err);
 		res.status(501).json({ msg: 'got error' });
@@ -45,7 +45,7 @@ route.delete('/:id', async (req, res) => {
 	const id = req.params.id;
 	try {
 		const info = await User.deleteOne({ _id: id });
-		res.json({ msg: 'done', info });
+		res.json({ msg: 'done', info, users: await User.find({}) });
 	} catch (err) {
 		console.log(err);
 		res.status(501).json({ msg: 'got error' });

@@ -5,24 +5,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const TableComponent: React.FC<{ setid: (id: string) => void }> = ({ setid }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [tableData, setTableData] = useState<any[]>([{ _id: 1 }]);
-  useEffect(() => {
-    fetch("http://localhost:5000/user", {
-      method: 'GET',
-    }).then((res) => {
-      return res.json()
-    }).then(data => {
-      setTableData(data.doc);
-    }).catch((err) => {
-      console.log(err)
-    })
-  }, [])
+const TableComponent: React.FC<{ setid: (id: string) => void, data: any }> = ({ setid, data }) => {
   return (
     <>
       <TableContainer component={Paper}>
@@ -43,7 +29,7 @@ const TableComponent: React.FC<{ setid: (id: string) => void }> = ({ setid }) =>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tableData.map((row) => (
+            {data.map((row) => (
               <TableRow
                 key={row._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableComponent from "./components/TableComponent";
 import FormComponent from "./components/Form";
 import DeleteModel from "./components/DeleteForm";
@@ -10,6 +10,9 @@ export default function App() {
   const [inputState, setInputState] = useState("");
   const [open, setOpen] = useState(false)
   const [dId, setDid] = useState<string | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [tableData, setTableData] = useState<any[]>([]);
+
   const handleChange = (e: SelectChangeEvent) => {
     setSearch(e.target.value)
   }
@@ -24,10 +27,22 @@ export default function App() {
       return res.json()
     }).then(data => {
       console.log("data", data)
+      setTableData(data.users)
     }).catch((err) => {
       console.log(err)
     })
   }
+  useEffect(() => {
+    fetch("http://localhost:5000/user", {
+      method: 'GET',
+    }).then((res) => {
+      return res.json()
+    }).then(data => {
+      setTableData(data.doc);
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, [])
 
   return (
     <main>
@@ -86,7 +101,7 @@ export default function App() {
           </Button>
         </Box>
       </Box>
-      <TableComponent setid={(id: string) => setDid(id)} />
+      <TableComponent setid={(id: string) => setDid(id)} data={tableData} />
       <FormComponent open={open} handleClose={() => setOpen(false)} />
       <DeleteModel open={dId != null} onDelete={deleteItem} onClose={() => setDid(null)} />
     </main>
