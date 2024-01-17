@@ -18,13 +18,13 @@ route.get('/', async (req, res) => {
 	}
 });
 
-route.post('/create', (req, res) => {
+route.post('/create', async (req, res) => {
 	console.log(req.body);
 	try {
 		const user = new User(req.body);
 
 		user.save();
-		res.json({ msg: 'done', users: User.find({}) });
+		res.json({ msg: 'done', users: await User.find({}) });
 	} catch (err) {
 		res.status(501).json({ msg: 'got error' });
 	}

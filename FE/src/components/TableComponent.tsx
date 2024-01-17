@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import { IconButton } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const TableComponent: React.FC<{ setid: (id: string) => void, data: any }> = ({ setid, data }) => {
+const TableComponent: React.FC<{ setid: (id: string) => void, data: any, handleUpdate: (data: any) => void }> = ({ setid, data, handleUpdate }) => {
   return (
     <>
       <TableContainer component={Paper}>
@@ -29,7 +29,8 @@ const TableComponent: React.FC<{ setid: (id: string) => void, data: any }> = ({ 
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {data.map((row: any) => (
               <TableRow
                 key={row._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -44,7 +45,7 @@ const TableComponent: React.FC<{ setid: (id: string) => void, data: any }> = ({ 
                 <TableCell align="center"><IconButton aria-label="delete" size="small" onClick={() => setid(row._id)}>
                   <Delete />
                 </IconButton>
-                  <IconButton aria-label="delete" size="small">
+                  <IconButton aria-label="delete" size="small" onClick={() => handleUpdate(row)}>
                     <Edit />
                   </IconButton>
                 </TableCell>

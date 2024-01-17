@@ -12,7 +12,8 @@ export default function App() {
   const [dId, setDid] = useState<string | null>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tableData, setTableData] = useState<any[]>([]);
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [updateData, setUpdateData] = useState<any>(null)
   const handleChange = (e: SelectChangeEvent) => {
     setSearch(e.target.value)
   }
@@ -96,13 +97,14 @@ export default function App() {
             />
           </Box>
 
-          <Button variant="contained" onClick={() => setOpen(true)} >
+          <Button variant="contained" onClick={() => { setUpdateData(null); setOpen(true) }} >
             Create
           </Button>
         </Box>
       </Box>
-      <TableComponent setid={(id: string) => setDid(id)} data={tableData} />
-      <FormComponent open={open} handleClose={() => setOpen(false)} />
+      {/*  eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <TableComponent setid={(id: string) => setDid(id)} data={tableData} handleUpdate={(data: any) => { setOpen(true); setUpdateData(data) }} />
+      <FormComponent open={open} handleClose={() => setOpen(false)} data={updateData} formType={updateData !== null ? "update" : "create"} />
       <DeleteModel open={dId != null} onDelete={deleteItem} onClose={() => setDid(null)} />
     </main>
   );

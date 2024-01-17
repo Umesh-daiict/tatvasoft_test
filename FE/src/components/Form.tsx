@@ -14,12 +14,15 @@ interface formField { Firstname: string, Lastname: string, Email: string, Phone:
 interface FormComponentProps {
     open: boolean;
     handleClose: () => void;
-    formType?: 'create' | 'update'
+    formType?: 'create' | 'update',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any
 }
 
 
-const FormComponent: React.FC<FormComponentProps> = ({ open, handleClose, formType = 'create' }) => {
-    const [formState, setFormState] = useState<formField>({ Firstname: '', Lastname: '', Email: '', Phone: '', Status: false });
+const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, formType = 'create' }) => {
+    console.log("da------------->", data);
+    const [formState, setFormState] = useState<formField>({ Firstname: data?.Firstname || '', Lastname: data?.Lastname || '', Email: data?.Email || '', Phone: data?.Phone || '', Status: data?.Status || false });
     const [showError, setShowError] = useState<string[]>([]);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.trim().length > 0) {
@@ -42,8 +45,9 @@ const FormComponent: React.FC<FormComponentProps> = ({ open, handleClose, formTy
         })
         setShowError(currErr);
         if (currErr.length == 0) {
-            fetch("http://localhost:5000/user/create", {
-                method: 'POST',
+            const url = formType == "create" ? "http://localhost:5000/user/create" : `http://localhost:5000/user/${data._id}`
+            fetch(url, {
+                method: formType == "create" ? 'POST' : "PATCH",
                 body: JSON.stringify(formState),
                 headers: {
                     "Content-Type": "application/json"
