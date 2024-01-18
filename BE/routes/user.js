@@ -34,7 +34,7 @@ route.patch('/:id', async (req, res) => {
 	const id = req.params.id;
 	try {
 		const info = await User.updateOne({ _id: id }, { $set: req.body });
-		res.json({ msg: 'done', info, users: User.find({}) });
+		res.json({ msg: 'done', info, users: await User.find({}) });
 	} catch (err) {
 		console.log(err);
 		res.status(501).json({ msg: 'got error' });

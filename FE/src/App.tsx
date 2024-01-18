@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import TableComponent from "./components/TableComponent";
 import FormComponent from "./components/Form";
 import DeleteModel from "./components/DeleteForm";
+import { StepData, formData } from "./components/types";
 
 
 export default function App() {
@@ -10,14 +11,19 @@ export default function App() {
   const [inputState, setInputState] = useState("");
   const [open, setOpen] = useState(false)
   const [dId, setDid] = useState<string | null>(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [tableData, setTableData] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [updateData, setUpdateData] = useState<any>(null)
+  const [step, setStep] = useState<StepData>({ page: 0, total: 1 })
+  const [tableData, setTableData] = useState<formData[]>([]);
+  const [updateData, setUpdateData] = useState<formData | null>(null)
   const handleChange = (e: SelectChangeEvent) => {
     setSearch(e.target.value)
   }
 
+  const changeStep = (count: number) => {
+    console.log("c------------L>", count)
+    setStep((prev) => ({ ...prev, page: count }))
+  }
+
+  const handleUpdate = (data: formData) => { setOpen(true); setUpdateData(data) }
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputState(e.target.value)
   }
@@ -45,6 +51,13 @@ export default function App() {
     })
   }, [])
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  const handleClose = (data?: any[]) => {
+    setOpen(false);
+    if (data?.length) {
+      setTableData(data);
+    }
+  }
   return (
     <main>
       <Box sx={{
@@ -102,9 +115,8 @@ export default function App() {
           </Button>
         </Box>
       </Box>
-      {/*  eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <TableComponent setid={(id: string) => setDid(id)} data={tableData} handleUpdate={(data: any) => { setOpen(true); setUpdateData(data) }} />
-      <FormComponent open={open} handleClose={() => setOpen(false)} data={updateData} formType={updateData !== null ? "update" : "create"} />
+      <TableComponent step={step} handleUpdate={handleUpdate} changeStep={changeStep} setid={(id: string) => setDid(id)} data={tableData} />
+      <FormComponent open={open} handleClose={handleClose} data={updateData} formType={updateData !== null ? "update" : "create"} />
       <DeleteModel open={dId != null} onDelete={deleteItem} onClose={() => setDid(null)} />
     </main>
   );

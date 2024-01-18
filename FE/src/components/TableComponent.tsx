@@ -5,10 +5,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { IconButton } from '@mui/material';
+import { Box, IconButton, Pagination } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const TableComponent: React.FC<{ setid: (id: string) => void, data: any, handleUpdate: (data: any) => void }> = ({ setid, data, handleUpdate }) => {
+import { TableComponentProps } from './types';
+
+const TableComponent: React.FC<TableComponentProps> = ({ setid, data, handleUpdate, changeStep }) => {
   return (
     <>
       <TableContainer component={Paper}>
@@ -54,6 +55,9 @@ const TableComponent: React.FC<{ setid: (id: string) => void, data: any, handleU
           </TableBody>
         </Table>
       </TableContainer>
+      <Box mt={4}>
+        <Pagination count={data?.length || 0} onChange={(_e, n) => changeStep(n)} color="primary" />
+      </Box>
     </>
   );
 }

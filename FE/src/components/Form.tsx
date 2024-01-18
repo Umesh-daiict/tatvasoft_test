@@ -1,7 +1,7 @@
 import { Button, Checkbox, FormControlLabel, Modal } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const FormData: { id: number, name: 'Firstname' | 'Lastname' | 'Email' | 'Phone', type?: string }[] = [
     { id: 1, name: 'Firstname' },
@@ -13,7 +13,8 @@ interface formField { Firstname: string, Lastname: string, Email: string, Phone:
 
 interface FormComponentProps {
     open: boolean;
-    handleClose: () => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handleClose: (data?: any[]) => void;
     formType?: 'create' | 'update',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any
@@ -24,6 +25,11 @@ const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, 
     console.log("da------------->", data);
     const [formState, setFormState] = useState<formField>({ Firstname: data?.Firstname || '', Lastname: data?.Lastname || '', Email: data?.Email || '', Phone: data?.Phone || '', Status: data?.Status || false });
     const [showError, setShowError] = useState<string[]>([]);
+
+    useEffect(() => {
+        setFormState({ Firstname: data?.Firstname || '', Lastname: data?.Lastname || '', Email: data?.Email || '', Phone: data?.Phone || '', Status: data?.Status || false })
+    }, [data])
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.trim().length > 0) {
             setShowError((prev) => prev.filter(item => item !== e.target.name))
@@ -56,6 +62,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, 
                 return res.json()
             }).then(data => {
                 console.log("data", data)
+                handleClose(data.users)
             }).catch((err) => {
                 console.log(err)
             })
@@ -65,7 +72,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, 
         <>
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={() => handleClose()}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
