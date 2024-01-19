@@ -11,7 +11,7 @@ export default function App() {
   const [inputState, setInputState] = useState("");
   const [open, setOpen] = useState(false)
   const [dId, setDid] = useState<string | null>(null)
-  const [step, setStep] = useState<StepData>({ page: 0, total: 1 })
+  const [step, setStep] = useState<StepData>({ page: 1, total: 1 })
   const [tableData, setTableData] = useState<formData[]>([]);
   const [updateData, setUpdateData] = useState<formData | null>(null)
   const handleChange = (e: SelectChangeEvent) => {
@@ -40,7 +40,7 @@ export default function App() {
     })
   }
   useEffect(() => {
-    fetch("http://localhost:5000/user", {
+    fetch(`http://localhost:5000/user?page=${step.page}&limit=10`, {
       method: 'GET',
     }).then((res) => {
       return res.json()
@@ -49,8 +49,20 @@ export default function App() {
     }).catch((err) => {
       console.log(err)
     })
-  }, [])
+  }, [step.page])
 
+  useEffect(() => {
+    fetch("http://localhost:5000/user/tot", {
+      method: 'GET',
+    }).then((res) => {
+      return res.json()
+    }).then(data => {
+      console.log("data--ads--d-as-da-sd-da", data)
+      setStep((prev) => ({ ...prev, total: data?.total || 1 }))
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, [])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   const handleClose = (data?: any[]) => {
     setOpen(false);

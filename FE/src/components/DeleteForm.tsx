@@ -1,6 +1,7 @@
 import { Box, Button, Modal } from "@mui/material"
+import { DeleteModelProps } from "./types";
 
-const DeleteModel: React.FC<{ open: boolean; onDelete: () => void; onClose: () => void }> = ({ open, onDelete, onClose }) => {
+const DeleteModel: React.FC<DeleteModelProps> = ({ open, onDelete, onClose }) => {
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={{ backgroundColor: "white", justifyContent: "center", width: "50%", position: "absolute", top: "35%", left: "20%" }}>

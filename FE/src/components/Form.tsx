@@ -2,6 +2,7 @@ import { Button, Checkbox, FormControlLabel, Modal } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
+import { FormComponentProps, formData } from './types';
 
 const FormData: { id: number, name: 'Firstname' | 'Lastname' | 'Email' | 'Phone', type?: string }[] = [
     { id: 1, name: 'Firstname' },
@@ -9,21 +10,11 @@ const FormData: { id: number, name: 'Firstname' | 'Lastname' | 'Email' | 'Phone'
     { id: 3, name: 'Email', type: 'email' },
     { id: 4, name: 'Phone', type: 'tel' },
 ]
-interface formField { Firstname: string, Lastname: string, Email: string, Phone: string, Status: boolean }
-
-interface FormComponentProps {
-    open: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handleClose: (data?: any[]) => void;
-    formType?: 'create' | 'update',
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data?: any
-}
 
 
 const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, formType = 'create' }) => {
     console.log("da------------->", data);
-    const [formState, setFormState] = useState<formField>({ Firstname: data?.Firstname || '', Lastname: data?.Lastname || '', Email: data?.Email || '', Phone: data?.Phone || '', Status: data?.Status || false });
+    const [formState, setFormState] = useState<formData>({ Firstname: data?.Firstname || '', Lastname: data?.Lastname || '', Email: data?.Email || '', Phone: data?.Phone || '', Status: data?.Status || false });
     const [showError, setShowError] = useState<string[]>([]);
 
     useEffect(() => {
@@ -51,7 +42,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, 
         })
         setShowError(currErr);
         if (currErr.length == 0) {
-            const url = formType == "create" ? "http://localhost:5000/user/create" : `http://localhost:5000/user/${data._id}`
+            const url = formType == "create" ? "http://localhost:5000/user/create" : `http://localhost:5000/user/${data?._id || ''}`
             fetch(url, {
                 method: formType == "create" ? 'POST' : "PATCH",
                 body: JSON.stringify(formState),

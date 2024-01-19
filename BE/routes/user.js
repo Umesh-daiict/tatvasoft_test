@@ -9,12 +9,22 @@ route.get('/', async (req, res) => {
 	const limit = req.query.limit || 10;
 
 	try {
+		const allData = 1;
 		const doc = await User.find({})
 			.skip((page - 1) * limit)
 			.limit(limit);
-		res.json({ msg: 'done', doc });
+		res.json({ msg: 'done', total: allData, doc });
 	} catch (err) {
 		res.status(501).json({ msg: 'got error' });
+	}
+});
+
+route.get('/tot', async (req, res) => {
+	try {
+		const doc = await User.countDocuments({});
+		res.json({ msg: 'done', total: Math.ceil(doc / 10) });
+	} catch (err) {
+		res.status(501).json({ msg: 'got error', err });
 	}
 });
 

@@ -9,7 +9,7 @@ import { Box, IconButton, Pagination } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 import { TableComponentProps } from './types';
 
-const TableComponent: React.FC<TableComponentProps> = ({ setid, data, handleUpdate, changeStep }) => {
+const TableComponent: React.FC<TableComponentProps> = ({ setid, data, step, handleUpdate, changeStep }) => {
   return (
     <>
       <TableContainer component={Paper}>
@@ -56,7 +56,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ setid, data, handleUpda
         </Table>
       </TableContainer>
       <Box mt={4}>
-        <Pagination count={data?.length || 0} onChange={(_e, n) => changeStep(n)} color="primary" />
+        <Pagination count={step.total || 0} onChange={(_e, n) => changeStep(n)} color="primary" />
       </Box>
     </>
   );
