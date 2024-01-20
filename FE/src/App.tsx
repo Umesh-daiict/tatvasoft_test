@@ -1,11 +1,21 @@
 import { Box, Button, FormControl, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TableComponent from "./components/TableComponent";
 import FormComponent from "./components/Form";
 import DeleteModel from "./components/DeleteForm";
 import { StepData, formData } from "./components/types";
 
+const debounceFetchSearch = (fn: () => void) => {
+  let timerId: number | undefined;
+  console.log("callled111222")
 
+  return () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      fn()
+    }, 1000)
+  }
+}
 export default function App() {
   const [search, setSearch] = useState("Firstname");
   const [inputState, setInputState] = useState("");
@@ -14,26 +24,46 @@ export default function App() {
   const [step, setStep] = useState<StepData>({ page: 1, total: 1 })
   const [tableData, setTableData] = useState<formData[]>([]);
   const [updateData, setUpdateData] = useState<formData | null>(null)
+
+  const handleOptSearch = useCallback(debounceFetchSearch(() => {
+    fetch(`http://localhost:5000/user/search?row=${search}&value=${inputState}`, {
+      method: 'POST',
+    }).then((res) => {
+      return res.json()
+    }).then(data => {
+      setTableData(data);
+    }).catch((err) => {
+      console.log(err)
+    })
+  }), [inputState, search])
   const handleChange = (e: SelectChangeEvent) => {
     setSearch(e.target.value)
+    handleOptSearch()
   }
 
   const changeStep = (count: number) => {
-    console.log("c------------L>", count)
     setStep((prev) => ({ ...prev, page: count }))
   }
 
   const handleUpdate = (data: formData) => { setOpen(true); setUpdateData(data) }
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputState(e.target.value)
+    handleOptSearch()
   }
+
+
+
+  useEffect(() => {
+    console.log("callled111s")
+
+
+  }, [inputState, search])
   const deleteItem = () => {
     fetch(`http://localhost:5000/user/${dId}`, {
       method: 'DELETE',
     }).then((res) => {
       return res.json()
     }).then(data => {
-      console.log("data", data)
       setTableData(data.users)
     }).catch((err) => {
       console.log(err)
@@ -57,7 +87,6 @@ export default function App() {
     }).then((res) => {
       return res.json()
     }).then(data => {
-      console.log("data--ads--d-as-da-sd-da", data)
       setStep((prev) => ({ ...prev, total: data?.total || 1 }))
     }).catch((err) => {
       console.log(err)

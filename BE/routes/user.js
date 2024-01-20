@@ -9,13 +9,26 @@ route.get('/', async (req, res) => {
 	const limit = req.query.limit || 10;
 
 	try {
-		const allData = 1;
 		const doc = await User.find({})
 			.skip((page - 1) * limit)
 			.limit(limit);
-		res.json({ msg: 'done', total: allData, doc });
+		res.json({ msg: 'done', doc });
 	} catch (err) {
 		res.status(501).json({ msg: 'got error' });
+	}
+});
+
+route.post('/search', async (req, res) => {
+	console.log(req.body);
+	const row = req.query.row;
+	const value = req.query.value;
+
+	try {
+		const users = await User.find({ [row]: new RegExp(value, 'i') });
+
+		res.json(users);
+	} catch (err) {
+		res.status(501).json({ msg: 'got error', err });
 	}
 });
 

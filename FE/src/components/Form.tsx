@@ -13,7 +13,6 @@ const FormData: { id: number, name: 'Firstname' | 'Lastname' | 'Email' | 'Phone'
 
 
 const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, formType = 'create' }) => {
-    console.log("da------------->", data);
     const [formState, setFormState] = useState<formData>({ Firstname: data?.Firstname || '', Lastname: data?.Lastname || '', Email: data?.Email || '', Phone: data?.Phone || '', Status: data?.Status || false });
     const [showError, setShowError] = useState<string[]>([]);
 
@@ -29,7 +28,6 @@ const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, 
         setFormState((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     }
     const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("e.target.name", e.target.name, e.target.value, e.target.checked)
         setFormState((prev) => ({ ...prev, [e.target.name]: e.target.checked }))
 
     }
@@ -52,7 +50,6 @@ const FormComponent: React.FC<FormComponentProps> = ({ open, data, handleClose, 
             }).then((res) => {
                 return res.json()
             }).then(data => {
-                console.log("data", data)
                 handleClose(data.users)
             }).catch((err) => {
                 console.log(err)
