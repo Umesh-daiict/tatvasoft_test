@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, IconButton, Pagination } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { TableComponentProps } from './types';
+import { TableComponentProps, formData } from './types';
 
 const TableComponent: React.FC<TableComponentProps> = ({ setid, data, step, handleUpdate, changeStep }) => {
   return (
@@ -30,8 +30,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ setid, data, step, hand
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {data.map((row: any) => (
+            {data.map((row: formData) => (
               <TableRow
                 key={row._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -43,7 +42,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ setid, data, step, hand
                 <TableCell align="center">{row.Phone}</TableCell>
                 <TableCell align="center">{row.Status ? "Active" : "InActive"}</TableCell>
 
-                <TableCell align="center"><IconButton aria-label="delete" size="small" onClick={() => setid(row._id)}>
+                <TableCell align="center"><IconButton aria-label="delete" size="small" onClick={() => setid(row?._id || "")}>
                   <Delete />
                 </IconButton>
                   <IconButton aria-label="delete" size="small" onClick={() => handleUpdate(row)}>

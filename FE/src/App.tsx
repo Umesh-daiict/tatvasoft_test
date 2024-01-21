@@ -51,13 +51,6 @@ export default function App() {
     handleOptSearch()
   }
 
-
-
-  useEffect(() => {
-    console.log("callled111s")
-
-
-  }, [inputState, search])
   const deleteItem = () => {
     fetch(`http://localhost:5000/user/${dId}`, {
       method: 'DELETE',
@@ -92,8 +85,7 @@ export default function App() {
       console.log(err)
     })
   }, [])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  const handleClose = (data?: any[]) => {
+  const handleClose = (data?: formData[]) => {
     setOpen(false);
     if (data?.length) {
       setTableData(data);
