@@ -1,10 +1,6 @@
 const User = require('../models/user-model');
 
-const router = require('express').Router;
-const route = router();
-
-route.get('/', async (req, res) => {
-	console.log(req.body);
+const handleGetUser = async (req, res) => {
 	const page = req.query.page || 1;
 	const limit = req.query.limit || 10;
 
@@ -16,9 +12,8 @@ route.get('/', async (req, res) => {
 	} catch (err) {
 		res.status(501).json({ msg: 'got error' });
 	}
-});
-
-route.post('/search', async (req, res) => {
+};
+const handlefindUser = async (req, res) => {
 	console.log(req.body);
 	const row = req.query.row;
 	const value = req.query.value;
@@ -30,9 +25,8 @@ route.post('/search', async (req, res) => {
 	} catch (err) {
 		res.status(501).json({ msg: 'got error', err });
 	}
-});
-
-getTotal = async (req, res) => {
+};
+const getTotal = async (req, res) => {
 	try {
 		const doc = await User.countDocuments({});
 		res.json({ msg: 'done', total: Math.ceil(doc / 10) });
@@ -41,7 +35,7 @@ getTotal = async (req, res) => {
 	}
 };
 
-hadleCreate = async (req, res) => {
+const hadleCreate = async (req, res) => {
 	console.log(req.body);
 	try {
 		const user = new User(req.body);
@@ -53,7 +47,7 @@ hadleCreate = async (req, res) => {
 	}
 };
 
-hadleIdUpdate = async (req, res) => {
+const hadleIdUpdate = async (req, res) => {
 	const id = req.params.id;
 	try {
 		const info = await User.updateOne({ _id: id }, { $set: req.body });
@@ -64,7 +58,7 @@ hadleIdUpdate = async (req, res) => {
 	}
 };
 
-hadleDelete = async (req, res) => {
+const hadleDelete = async (req, res) => {
 	const id = req.params.id;
 	try {
 		const info = await User.deleteOne({ _id: id });
@@ -74,4 +68,11 @@ hadleDelete = async (req, res) => {
 		res.status(501).json({ msg: 'got error' });
 	}
 };
-module.exports = { hadleDelete };
+module.exports = {
+	hadleDelete,
+	handleGetUser,
+	handlefindUser,
+	hadleIdUpdate,
+	hadleCreate,
+	getTotal,
+};
