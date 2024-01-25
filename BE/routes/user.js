@@ -1,77 +1,24 @@
-const User = require('../models/user-model');
+const {
+	hadleDelete,
+	hadleIdUpdate,
+	hadleCreate,
+	getTotal,
+	handlefindUser,
+	handleGetUser,
+} = require('../controller/user-controller');
 
 const router = require('express').Router;
 const route = router();
 
-route.get('/', async (req, res) => {
-	console.log(req.body);
-	const page = req.query.page || 1;
-	const limit = req.query.limit || 10;
+route.get('/', handleGetUser);
 
-	try {
-		const doc = await User.find({})
-			.skip((page - 1) * limit)
-			.limit(limit);
-		res.json({ msg: 'done', doc });
-	} catch (err) {
-		res.status(501).json({ msg: 'got error' });
-	}
-});
+route.post('/search', handlefindUser);
 
-route.post('/search', async (req, res) => {
-	console.log(req.body);
-	const row = req.query.row;
-	const value = req.query.value;
+route.get('/tot', getTotal);
 
-	try {
-		const users = await User.find({ [row]: new RegExp(value, 'i') });
+route.post('/create', hadleCreate);
 
-		res.json(users);
-	} catch (err) {
-		res.status(501).json({ msg: 'got error', err });
-	}
-});
+route.patch('/:id', hadleIdUpdate);
 
-route.get('/tot', async (req, res) => {
-	try {
-		const doc = await User.countDocuments({});
-		res.json({ msg: 'done', total: Math.ceil(doc / 10) });
-	} catch (err) {
-		res.status(501).json({ msg: 'got error', err });
-	}
-});
-
-route.post('/create', async (req, res) => {
-	console.log(req.body);
-	try {
-		const user = new User(req.body);
-
-		user.save();
-		res.json({ msg: 'done', users: await User.find({}) });
-	} catch (err) {
-		res.status(501).json({ msg: 'got error' });
-	}
-});
-
-route.patch('/:id', async (req, res) => {
-	const id = req.params.id;
-	try {
-		const info = await User.updateOne({ _id: id }, { $set: req.body });
-		res.json({ msg: 'done', info, users: await User.find({}) });
-	} catch (err) {
-		console.log(err);
-		res.status(501).json({ msg: 'got error' });
-	}
-});
-
-route.delete('/:id', async (req, res) => {
-	const id = req.params.id;
-	try {
-		const info = await User.deleteOne({ _id: id });
-		res.json({ msg: 'done', info, users: await User.find({}) });
-	} catch (err) {
-		console.log(err);
-		res.status(501).json({ msg: 'got error' });
-	}
-});
+route.delete('/:id', hadleDelete);
 module.exports = route;
