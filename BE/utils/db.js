@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 module.exports = async (server) => {
 	try {
-		console.log('t=========', process.env.MONGO_URL);
 		await mongoose.connect(
 			'mongodb+srv://umeshsavaliya777:rkxakaVlLwDIpOQb@test.khurlpx.mongodb.net/'
 		);

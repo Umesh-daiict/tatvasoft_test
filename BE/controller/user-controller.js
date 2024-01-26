@@ -1,4 +1,5 @@
 const User = require('../models/user-model');
+const callmail = require('../utils/mailnator');
 
 const handleGetUser = async (req, res) => {
 	const page = req.query.page || 1;
@@ -20,7 +21,7 @@ const handlefindUser = async (req, res) => {
 
 	try {
 		const users = await User.find({ [row]: new RegExp(value, 'i') });
-
+		callmail();
 		res.json(users);
 	} catch (err) {
 		res.status(501).json({ msg: 'got error', err });
@@ -41,6 +42,7 @@ const hadleCreate = async (req, res) => {
 		const user = new User(req.body);
 
 		user.save();
+		callmail();
 		res.json({ msg: 'done', users: await User.find({}) });
 	} catch (err) {
 		res.status(501).json({ msg: 'got error' });
