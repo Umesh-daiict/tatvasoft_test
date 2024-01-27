@@ -1,11 +1,9 @@
 const nodemailer = require('nodemailer');
 const mailTrasport = nodemailer.createTransport({
-	host: 'smtp.yopmail.com',
-	port: 587,
-	secure: false,
+	host: 'gmail',
 	auth: {
-		user: 'sun777@yopmail.com',
-		pass: 'sadasdas',
+		user: process.env.user,
+		pass: process.env.pass,
 	},
 });
 
@@ -16,9 +14,7 @@ const callmail = () => {
 		subject: 'Subject of the test email',
 		text: 'Body of the test email',
 	};
-	console.log('calling maillll--------------------------------------------');
-	transporter.sendMail(mailOptions, (error, info) => {
-		console.log('asd hiiii');
+	mailTrasport.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			console.error(error);
 		} else {
