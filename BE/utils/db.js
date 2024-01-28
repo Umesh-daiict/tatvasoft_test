@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 module.exports = async (server) => {
 	try {
-		await mongoose.connect(
-			'mongodb+srv://umeshsavaliya777:rkxakaVlLwDIpOQb@test.khurlpx.mongodb.net/'
-		);
+		await mongoose.connect(process.env.MONGO_URL);
 		console.log('mongo db connected ...');
 		server.listen(5000, () => {
 			console.log('server runing on port ' + 5000);
